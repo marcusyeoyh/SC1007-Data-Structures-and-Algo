@@ -108,5 +108,26 @@ void deleteList(ListNode **ptrHead){
 
 int split(ListNode *cur, ListNode **ptrEvenList,ListNode **ptrOddList)
 {
+	int evenSize = 0, oddSize = 0, size = 0;
+    ListNode *tempsize = cur;
 
+    if(cur == NULL){
+        return 0;
+    }
+
+    while (tempsize != NULL){
+        size++;
+        tempsize = tempsize->next;
+    }
+    ListNode *tempnode = cur;
+    for (int i = 0; i<size; i++){
+        if (i%2 == 0){
+            if(insertNode(ptrEvenList, evenSize, tempnode->item)) evenSize++;
+        }
+        else{
+            if(insertNode(ptrOddList, oddSize, tempnode->item)) oddSize++;
+        }
+        tempnode = tempnode->next;
+    }
+    return 1;
 }
