@@ -94,28 +94,29 @@ void deleteList(ListNode **ptrHead){
 }
 
 int moveMaxToFront(ListNode **ptrHead){
-    ListNode *cur = *ptrHead, *biggest = NULL, *pre=NULL;
-    int base = 0;
-    int counter = 0;
-    while (cur!=NULL){
-        if (cur->item > base){
-            base = cur->item;
-        }
-        cur = cur->next;
+    int biggestInt=-100, biggestNode, size=0;
+    ListNode *tempnode = *ptrHead;
+    while(tempnode!=NULL){
+        size++;
+        tempnode=tempnode->next;
     }
-    cur = *ptrHead;
-    while(cur!=NULL){
-        if (cur->next->item!=base){
-            cur = cur->next;
-        }
-        else{
-            pre = cur;
-            biggest = cur->next;
-            break;
-        }
+    ListNode *tempnode2 = *ptrHead;
+    if ((*ptrHead) ==NULL){
+        return -1;
     }
-    pre->next=biggest->next;
-    biggest->next = *ptrHead;
-    *ptrHead = biggest;
-    return 1;
+    else{
+        for(int i=0; i<size; i++){
+            if(tempnode2->item>biggestInt){
+                biggestInt = tempnode2->item;
+                biggestNode = i;
+            }
+            tempnode2 = tempnode2->next;
+        }
+        if(biggestNode == 0){
+            return 0;
+        }
+        findNode(*ptrHead, biggestNode-1)->next=findNode(*ptrHead, biggestNode-1)->next->next;
+        if(insertNode(ptrHead, 0, biggestInt))size++;
+        return biggestNode;
+    }
 }
