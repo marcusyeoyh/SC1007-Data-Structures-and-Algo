@@ -99,5 +99,25 @@ void deleteList(ListNode **ptrHead){
 
 int removeNode(ListNode **ptrHead,int index)
 {
-
+    ListNode *temphead = *ptrHead;
+    int size = 0;
+    while (temphead != NULL){
+        size++;
+        temphead = temphead->next;
+    }
+    ListNode *temphead2 = *ptrHead;
+    if (index>size-1){
+        return 0;
+    }
+    else if (index == 0){
+        *ptrHead = (*ptrHead)->next;
+        return 1;
+    }
+    else{
+        for(int i = 0; i<index-1; i++){
+            temphead2 = temphead2->next;
+        }
+        temphead2->next = temphead2->next->next;
+        return 1;
+    }
 }
