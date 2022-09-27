@@ -1,0 +1,29 @@
+int isOperand(char i){
+    if(i>='0' && i<='9'){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+void expressionQ(char *infix, Queue* qPtr)
+{
+    char temp[1000];
+    temp[0] = 0;
+    for (int i = 0; i<strlen(infix);i++){
+        if(isOperand(infix[i]) == 1 && isOperand(infix[i+1]) == 1){
+            strncat(temp, &infix[i], 1);
+        }
+        else if (isOperand(infix[i]) == 1 && isOperand(infix[i+1]) == 0){
+            strncat(temp, &infix[i], 1);
+            int str = atoi(temp);
+            enqueue(qPtr, str, OPERAND);
+            memset(temp, '\0', sizeof temp);
+        }
+        else{
+            int str = (int) infix[i];
+            enqueue(qPtr, str, OPT);
+        }        
+    }
+}
