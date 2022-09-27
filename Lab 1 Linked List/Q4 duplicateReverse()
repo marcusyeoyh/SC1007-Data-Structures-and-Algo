@@ -119,3 +119,16 @@ int duplicateReverse(ListNode *cur,ListNode **ptrNewHead)
         return 0;
     }  
 }
+int duplicateReverse2(ListNode*cur,ListNode **ptrNewHead){
+    int size = 0;
+    if (cur == NULL){
+        return 0;
+    }
+    else{
+        while(cur!=NULL){
+            if(insertNode(ptrNewHead,0,cur->item))size++;
+            cur = cur->next;
+        }
+        return 1;
+    }
+}
