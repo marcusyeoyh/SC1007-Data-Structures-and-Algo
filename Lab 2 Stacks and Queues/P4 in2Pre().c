@@ -83,7 +83,7 @@ int isOperand(char infix){
     if(infix>='a' && infix<= 'z'){
         return 1;
     }
-    else if (infix>='A' && infix>= 'Z'){
+    else if (infix>='A' && infix<= 'Z'){
         return 1;
     }
     else if (infix>='0' && infix<= '9'){
@@ -96,108 +96,47 @@ int isOperand(char infix){
 
 void in2Pre(char* infix, char* prefix)
 {
-Stack *newStack;  
-newStack->size = 0;  
-newStack->head = NULL;  
-char postfix[SIZE] = ""; 
-postfix[0] = 0; 
-prefix[0] = 0; 
-char var1, var2, var3; 
- 
-for (int i = strlen(infix); i>=0 ;i--){  
-    Stack newstack; 
-    newstack.head = NULL; 
-    newstack.size = 0; 
- 
-    int length = strlen(infix); 
- 
-    int i,j; 
- 
-    int prefixindex = 0; 
- 
-    for(j=length-1;j>=0;j--){ 
- 
-        char character = infix[j]; 
- 
-        if((character >= '0' && character <= '9') || (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z')){ 
- 
- 
-            prefix[prefixindex++] = character; 
- 
- 
-        } 
- 
-        if(character == ')') push(&newstack,character); 
- 
- 
-        if(character == '*' || character == '/') push(&newstack,character); 
- 
-        if(character == '('){ 
- 
-            while(!isEmptyStack(newstack) && peek(newstack) != ')'){ 
- 
-                prefix[prefixindex++] = peek(newstack); 
- 
-                pop(&newstack); 
- 
- 
-            } 
- 
- 
-            pop(&newstack); 
-           } 
- 
-        if(character == '+' || character == '-'){ 
- 
-            while(!isEmptyStack(newstack) && peek(newstack) != ')' && (peek(newstack) == '*' || peek(newstack) == '/' )){ 
- 
-                prefix[prefixindex++] = peek(newstack); 
- 
-                pop(&newstack); 
- 
- 
- 
-            } 
- 
-            push(&newstack,character); 
- 
-        } 
- 
-    } 
- 
-    while(!isEmptyStack(newstack)){ 
- 
- 
-        prefix[prefixindex++] = peek(newstack); 
- 
-        pop(&newstack); 
- 
- 
-    } 
- 
-    prefix[prefixindex] = '\0'; 
- 
- 
-    int length2 = strlen(prefix); 
- 
-    char temparray[SIZE]; 
- 
-    int k; 
-    int temparrayindex = 0; 
- 
- 
-    for(k=length2-1;k>=0;k--){ 
- 
- 
-        temparray[temparrayindex++] = prefix[k]; 
- 
- 
-    } 
-    temparray[temparrayindex] = '\0';
- 
- 
- 
-    strcpy(prefix,temparray); 
- 
+    Stack s; 
+    s.head = NULL; 
+    s.size = 0; 
 
+    char temp[SIZE] = "";
+    int tempindex = 0;
+    int length = strlen(infix);
+ 
+    for (int i = length-1; i>=0; i--){
+        //temp[tempindex++] = infix[i];
+        if ((infix[i]>='0' && infix[i]<='9') || (infix[i]>='a' && infix[i]<='z') || (infix[i]>='A' && infix[i]<='Z')){
+            temp[tempindex++] = infix[i];
+        }
+        else if (infix[i]==')'){
+            push(&s, infix[i]);
+        }
+        else if (infix[i] == '('){
+            while(peek(s)!=')'){
+                temp[tempindex++] = peek(s);
+                pop(&s);
+            }
+            pop(&s);
+        }
+        else{
+            while(isEmptyStack(s)==0 && peek(s) != ')' && pres(peek(s))>pres(infix[i])){
+                temp[tempindex++] = peek(s);
+                pop(&s);
+            }
+            push(&s, infix[i]);
+        }
+    }
+    while(isEmptyStack(s)==0){
+        temp[tempindex++] = peek(s);
+        pop(&s);
+    }
+    //strcpy(prefix, temp);
+    
+    int length2 = strlen(temp);
+    int prefixindex = 0;
+    for(int j = length2-1; j>=0;j--){
+        prefix[prefixindex++]=temp[j];
+    }
+    prefix[prefixindex]='\0';
 }
