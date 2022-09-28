@@ -127,24 +127,42 @@ BTNode* saveNode(BTNode **cur){
 }
 
 void rotateRNode(BTNode **node){
-    if (*node == NULL){
-        return;
+    BTNode *tempnode = (*node)->left, *noderight;
+    if(tempnode->left!=NULL && tempnode->right!=NULL){
+        noderight = (*node)->left->right;
+        (*node)->left = noderight;
+        tempnode->right = *node;
+        *node = tempnode;
     }
-    else if ((*node)->left!=NULL && (*node)->right == NULL){
-        int tempint = (*node)->item;
-        *node = (*node)->left;
-        (*node)->right = insertBSTNode((*node)->right, tempint);
-        return;
+    else if(tempnode->left!=NULL && tempnode->right==NULL){
+        noderight = (*node)->left->right;
+        (*node)->left = noderight;
+        tempnode->right = *node;
+        *node = tempnode;
     }
-    else if ((*node)->left!=NULL && (*node)->right != NULL){
-        BTNode *tempnode = saveNode(node);
-        int tempint = (*node)->item;
-        *node = (*node)->left;
-        (*node)->right = insertBSTNode((*node)->right, tempint);
-        (*node)->right = tempnode;
-        return;
+    else if (tempnode->left==NULL && tempnode->right!=NULL){
+        rotateLNode(&tempnode);
+        rotateRNode(node);
     }
-    else{
-        return;
+    
+}
+
+void rotateLNode(BTNode **node){
+    BTNode *tempnode = (*node)->right, *nodeleft;
+    if(tempnode->left!=NULL && tempnode->right!=NULL){
+        nodeleft = (*node)->right->left;
+        (*node)->right = nodeleft;
+        tempnode->left = *node;
+        *node = tempnode;
+    }
+    else if(tempnode->left!=NULL && tempnode->right==NULL){
+        nodeleft = (*node)->right->left;
+        (*node)->right = nodeleft;
+        tempnode->left = *node;
+        *node = tempnode;
+    }
+    else if (tempnode->left==NULL && tempnode->right!=NULL){
+        rotateRNode(&tempnode);
+        rotateLNode(node);
     }
 }
