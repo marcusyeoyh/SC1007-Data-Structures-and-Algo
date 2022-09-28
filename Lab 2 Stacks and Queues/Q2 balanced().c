@@ -156,47 +156,36 @@ int balanced(char *expression){
     Bracket.head=NULL;
     Bracket.size=0;
 
-    char temp[strlen(expression)];
-    temp[0] = 0;
-    for (int i = 0; i<strlen(expression); i++){
-        if (expression[i] == '{' || expression[i]=='}' || expression[i]=='[' || expression[i]==']' || expression[i]=='(' || expression[i]==')'){
-            strncat(temp, &expression[i], 1);
+    for(int i = 0; i<strlen(expression); i++){
+        if (expression[i] == '(' || expression[i] == '[' || expression[i] == '{'){
+            push(&Bracket, expression[i]);
+        }
+        else if (expression[i] == ')'){
+            if(peek(Bracket)!='('){
+                return 0;
+            }
+            else{
+                pop(&Bracket);
+            }
+        }
+        else if (expression[i] == ']'){
+            if(peek(Bracket)!='['){
+                return 0;
+            }
+            else{
+                pop(&Bracket);
+            }
+        }
+        else if (expression[i] == '}'){
+            if(peek(Bracket)!='{'){
+                return 0;
+            }
+            else{
+                pop(&Bracket);
+            }
         }
     }
-    
-    for (int i = 0; i<strlen(temp); i++){
-        if (temp[i] == '{' || temp[i] == '[' || temp[i] == '('){
-            push(&Bracket, temp[i]);
-        }
-        else if (temp[i] == '}'){
-            if (peek(Bracket) == '{'){
-                pop(&Bracket);
-            }
-            else{
-                return 0;
-                break;
-            }
-        }
-        else if (temp[i] == ']'){
-            if (peek(Bracket) == '['){
-                pop(&Bracket);
-            }
-            else{
-                return 0;
-                break;
-            }
-        }
-        else if (temp[i] == ')'){
-            if (peek(Bracket) == '('){
-                pop(&Bracket);
-            }
-            else{
-                return 0;
-                break;
-            }
-        }
-    }  
-    if (isEmptyStack(Bracket) == 1){
+    if(isEmptyStack(Bracket) == 1){
         return 1;
     }
     else{
