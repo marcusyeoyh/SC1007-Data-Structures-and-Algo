@@ -105,41 +105,99 @@ prefix[0] = 0;
 char var1, var2, var3; 
  
 for (int i = strlen(infix); i>=0 ;i--){  
-    if (isOperand(infix[i]) == 1){  
-        strncat(postfix, &infix[i], 1); 
-        printf("%s\n",postfix); 
-    }  
-    else if(infix[i] == '('){  
-        while (peek(*newStack)!=')'){  
-            var1 = peek(*newStack);  
-            strncat(postfix, &var1, 1);  
-            pop(newStack);  
-        }  
-        pop(newStack);  
-    }  
-    else if (infix[i] == ')'){  
-        push(newStack, infix[i]);  
-    }  
-    else{  
-        while (isEmptyStack(*newStack) == 0 && peek(*newStack)!='(' && pres(peek(*newStack))>pres(infix[i])){  
-            var2 = peek(*newStack);  
-            strncat(postfix, &var2, 1);
-            printf("%s\n",postfix);  
-            pop(newStack);  
-        }  
-        push(newStack, infix[i]);  
-    }  
-}  
+    Stack newstack; 
+    newstack.head = NULL; 
+    newstack.size = 0; 
  
-while (newStack->size != 0){  
-    //printf("%c\n",peek(*newStack)); 
-    var3 = peek(*newStack); 
-    strncat(postfix, &var3, 1); 
-    pop(newStack); 
-     
-}  
+    int length = strlen(infix); 
  
-for (int j = strlen(postfix); j>=0; j--){ 
-    strncat(prefix, &postfix[j], 1); 
-} 
+    int i,j; 
+ 
+    int prefixindex = 0; 
+ 
+    for(j=length-1;j>=0;j--){ 
+ 
+        char character = infix[j]; 
+ 
+        if((character >= '0' && character <= '9') || (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z')){ 
+ 
+ 
+            prefix[prefixindex++] = character; 
+ 
+ 
+        } 
+ 
+        if(character == ')') push(&newstack,character); 
+ 
+ 
+        if(character == '*' || character == '/') push(&newstack,character); 
+ 
+        if(character == '('){ 
+ 
+            while(!isEmptyStack(newstack) && peek(newstack) != ')'){ 
+ 
+                prefix[prefixindex++] = peek(newstack); 
+ 
+                pop(&newstack); 
+ 
+ 
+            } 
+ 
+ 
+            pop(&newstack); 
+           } 
+ 
+        if(character == '+' || character == '-'){ 
+ 
+            while(!isEmptyStack(newstack) && peek(newstack) != ')' && (peek(newstack) == '*' || peek(newstack) == '/' )){ 
+ 
+                prefix[prefixindex++] = peek(newstack); 
+ 
+                pop(&newstack); 
+ 
+ 
+ 
+            } 
+ 
+            push(&newstack,character); 
+ 
+        } 
+ 
+    } 
+ 
+    while(!isEmptyStack(newstack)){ 
+ 
+ 
+        prefix[prefixindex++] = peek(newstack); 
+ 
+        pop(&newstack); 
+ 
+ 
+    } 
+ 
+    prefix[prefixindex] = '\0'; 
+ 
+ 
+    int length2 = strlen(prefix); 
+ 
+    char temparray[SIZE]; 
+ 
+    int k; 
+    int temparrayindex = 0; 
+ 
+ 
+    for(k=length2-1;k>=0;k--){ 
+ 
+ 
+        temparray[temparrayindex++] = prefix[k]; 
+ 
+ 
+    } 
+    temparray[temparrayindex] = '\0';
+ 
+ 
+ 
+    strcpy(prefix,temparray); 
+ 
+
 }
