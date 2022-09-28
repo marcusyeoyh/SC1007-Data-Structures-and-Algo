@@ -107,41 +107,30 @@ void deleteList2(LinkedList *ll){
 }
 
 void moveEvenItemsToBack(LinkedList *ll){
-    ListNode *temphead = ll->head, *even=NULL, *evenhead = NULL; 
-    while(temphead->next!=NULL){
-        if (temphead->item%2==0){
-            if (even==NULL){
-                even = temphead;
-                evenhead = temphead;
-                ll->head = temphead->next;
-            }
-            else{
-                even->next = temphead;
-                even = even->next;
-                ll->head = temphead->next;
-            }
+    LinkedList evenList;
+    evenList.head=NULL;
+    evenList.size=0;
+
+    ListNode *pre = NULL;
+    ListNode *cur = ll->head;
+
+    while(cur!=NULL){
+        if(cur->item%2==0 && pre == NULL){
+            insertNode2(&evenList, evenList.size, cur->item);
+            ll->head = ll->head->next;
+            ll->size--;
+            cur = cur->next;
         }
-        else if (temphead->next->item %2 == 0){
-            if (even==NULL){
-                even = temphead->next;
-                evenhead = temphead->next;
-                temphead->next = temphead->next->next;
-            }
-            else{
-                even->next = temphead->next;
-                if (temphead->next->next==NULL){
-                    even = even->next;
-                    break;
-                }
-                else{
-                    temphead->next = temphead->next->next;
-                    even = even->next;
-                }
-                
-            }
-        } 
-        temphead = temphead->next;
+        else if(cur->item%2==0){
+            insertNode2(&evenList, evenList.size, cur->item);
+            pre->next = cur->next;
+            cur = cur->next;
+            ll->size--;
+        }
+        else{
+            pre = cur;
+            cur=cur->next;
+        }
     }
-    even->next = NULL;
-    temphead->next = evenhead;
+    findNode2(*ll, ll->size-1)->next = evenList.head;
 }
