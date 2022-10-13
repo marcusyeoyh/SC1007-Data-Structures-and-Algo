@@ -147,7 +147,7 @@ int HashInsert(HashTable* Q3HashPtr, int key)
     }
     ListNode *newNode = (ListNode*) malloc(sizeof(ListNode));
     newNode->key=key;
-    newNode->next=NULL;
+    newNode->next=Q3HashPtr->Table[hashkey].head;
     Q3HashPtr->Table[hashkey].head=newNode;
     Q3HashPtr->Table[hashkey].size++;
     Q3HashPtr->nSize++;
